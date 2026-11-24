@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkSeed — Web App Launcher</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <style>
+    :root {
+      --bg-page: #ffffff;
+      --bg-surface: #ffffff;
+      --bg-subtle: #fff7f2;
+      --text-main: #1a1a1a;
+      --text-muted: #666666;
+      --orange-primary: #ff6b00;
+      --orange-secondary: #ff8533;
+      --orange-light: #fff0e6;
+      --orange-glow: rgba(255, 107, 0, 0.25);
+      --border-light: #f0f0f0;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 28px rgba(255, 107, 0, 0.14);
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --transition-smooth: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: radial-gradient(circle at 85% 0%, var(--orange-light) 0%, transparent 45%);
+      background-repeat: no-repeat;
+    }
+
+    .portal-main {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.25rem 1.5rem 3.5rem;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--orange-primary);
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .app-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+      padding: 1.75rem 1rem;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange-primary), var(--orange-secondary));
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .app-card:hover,
+    .app-card:focus-visible {
+      transform: translateY(-5px);
+      border-color: var(--orange-secondary);
+      box-shadow: var(--shadow-hover);
+      outline: none;
+    }
+
+    .app-card:hover::after,
+    .app-card:focus-visible::after {
+      opacity: 1;
+    }
+
+    .app-icon-wrapper {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      transition: var(--transition-smooth);
+    }
+
+    .app-card:hover .app-icon-wrapper,
+    .app-card:focus-visible .app-icon-wrapper {
+      background-color: var(--orange-light);
+      transform: scale(1.08);
+    }
+
+    .app-icon-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .app-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+
+    .portal-footer {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .portal-footer span strong {
+      color: var(--orange-primary);
+    }
+
+    @media (max-width: 600px) {
+      .portal-main {
+        padding: 1.5rem 1.25rem 2.5rem;
+      }
+
+      .app-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .app-card {
+        padding: 1.4rem 0.75rem;
+      }
+
+      .portal-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+  <script src="scripts/navbar.js" defer></script>
+</head>
+<body>
+
+  <main class="portal-main" id="all-apps">
+    <h2 class="section-label">Choose you're destination</h2>
+
+    <nav class="app-grid" aria-label="Website Portal Links">
+      <a href="https://yaktenz.github.io/mayonaise.gg" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/placeholder.png" alt="MAYONAISE LINKSEED" loading="lazy">
+        </div>
+        <span class="app-name">MAYONAISE</span>
+      </a>
+
+      <a href="https://yaktenz.github.io/youngdollazz/" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/placeholder.png" alt="Figma icon" loading="lazy">
+        </div>
+        <span class="app-name">YOUNGDOLLAZZ</span>
+      </a>
+
+      <a href="https://soundcloud.com/youngdollazz1700" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/SoundCloud.png" alt="SoundCloud icon" loading="lazy">
+        </div>
+        <span class="app-name">SOUNDCLOUD</span>
+      </a>
+
+      <a href="https://discord.gg/invite/a7eNTUaYPh" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/discord.png" alt="Discord icon" loading="lazy">
+        </div>
+        <span class="app-name">DISCORD</span>
+      </a>
+
+      <a href="https://www.tiktok.com/@glitchtheory_vision" target="_blank"  rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/tiktok.png" alt="COMING SOON" loading="lazy">
+        </div>
+        <span class="app-name">TIKTOK</span>
+      </a>
+
+      <a href="https://www.youtube.com/@TheRealMayo_" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/youtube.png" alt="YouTube Icon" loading="lazy">
+        </div>
+        <span class="app-name">YOUTUBE</span>
+      </a>
+
+      <h2 class="section-label">Other Sites</h2>
+
+      <a href="https://stadiastudios.github.io/stadia/" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="https://stadiastudios.github.io/stadia/assets/favicon.png" alt="StadiaStudios Icon" loading="lazy">
+        </div>
+        <span class="app-name">STADIASTUDIOS</span>
+      </a>
+
+      <a href="https://stadiastudios.github.io/stadia/store/passpro.html" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/passpro.png" alt="StadiaStudios Icon" loading="lazy">
+        </div>
+        <span class="app-name">PASSPRO</span>
+      </a>
+      
+      <a href="https://stadiastudios.github.io/ourjourney/splash" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="https://stadiastudios.github.io/stadia/store/assets/app/ourjourney.png" alt="StadiaStudios Icon" loading="lazy">
+        </div>
+        <span class="app-name">OUR JOURNEY</span>
+      </a>
+
+      <a href="https://edgebolt.vercel.app/" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/placeholder.png" alt="StadiaStudios Icon" loading="lazy">
+        </div>
+        <span class="app-name">EDGEBOLT</span>
+      </a>
+
+      <h2 class="section-label">Featured Profiles</h2>
+
+      <a href="#" target="_blank" rel="noopener noreferrer" class="app-card">
+        <div class="app-icon-wrapper">
+          <img src="assets/platform/placeholder.png" alt="StadiaStudios Icon" loading="lazy">
+        </div>
+        <span class="app-name">N/A</span>
+      </a>
+
+    </nav>
+  </main>
+
+  <footer class="portal-footer">
+    <span><strong>LINKSEED</strong> - Constructed By Mayonaise</span>
+    <span>Zero dependencies &bull; Built to last</span>
+  </footer>
+
+</body>
+</html>

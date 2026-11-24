@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkSeed | MAYONAISE GAMING</title>
+  <meta name="theme-color" content="#0d0818" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="apple-mobile-web-app-title" content="Vice Links" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="profiles/mayonaise/avatar.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --vice-pink: #f143a2;
+      --vice-coral: #ff726a;
+      --vice-sunset: #ff9347;
+      --vice-purple: #6c43c2;
+      --vice-cyan: #00f0ff;
+      --glass-bg: rgba(16, 12, 28, 0.68);
+      --glass-border: rgba(255, 255, 255, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scrollbar-color: var(--vice-pink) #160f25;
+      scrollbar-width: thin;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #160f25;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--vice-sunset), var(--vice-pink), var(--vice-purple));
+      border: 2px solid #160f25;
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--vice-coral), var(--vice-pink));
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      background-color: #0d0818;
+      background-image: url('profiles/mayonaise/bg-desktop.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        background-image: url('profiles/mayonaise/bg-mobile.png');
+        background-attachment: scroll;
+      }
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(13, 8, 24, 0.45) 0%,
+        rgba(13, 8, 24, 0.78) 100%
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #snowfall {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .profile-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar-ring {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--vice-sunset), var(--vice-pink), var(--vice-purple));
+      box-shadow: 0 0 25px rgba(241, 67, 162, 0.55);
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      background-color: #161026;
+      display: block;
+    }
+
+    #profile-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 3px;
+      line-height: 1;
+      background: linear-gradient(90deg, #ffffff 20%, var(--vice-coral) 60%, var(--vice-pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    }
+
+    #profile-bio {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .links-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .link-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      color: #ffffff;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 16px 22px;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .link-card.featured {
+      border: 1px solid rgba(241, 67, 162, 0.75);
+      background: linear-gradient(
+        90deg,
+        rgba(241, 67, 162, 0.22) 0%,
+        rgba(108, 67, 194, 0.22) 100%
+      );
+      box-shadow: 0 0 20px rgba(241, 67, 162, 0.25);
+    }
+
+    .link-card:hover {
+      transform: translateY(-3px) scale(1.015);
+      border-color: var(--vice-sunset);
+      background: rgba(28, 20, 48, 0.85);
+      box-shadow: 0 10px 25px rgba(241, 67, 162, 0.35), 0 0 12px rgba(255, 147, 71, 0.3);
+    }
+
+    .link-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .link-title {
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .link-subtitle {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .link-arrow {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--vice-coral);
+      transition: transform 0.22s ease, color 0.22s ease;
+    }
+
+    .link-card:hover .link-arrow {
+      transform: translate(3px, -3px);
+      color: var(--vice-cyan);
+    }
+
+    .footer {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: rgba(255, 255, 255, 0.45);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+  <canvas id="snowfall" aria-hidden="true"></canvas>
+
+  <main class="container">
+    
+    <header class="profile-header">
+      <div class="avatar-ring">
+        <img src="profiles/mayonaise/avatar.png" alt="Profile Picture" class="avatar" />
+      </div>
+      
+      <h1 id="profile-name">MAYONAISE</h1>
+      <p id="profile-bio">WELCOME TO MY WORLD OF GAMING</p>
+    </header>
+
+    <nav id="links-container" class="links-list"></nav>
+
+    <a style="text-decoration: none;" href="index.html"><footer class="footer">
+      <span>LINKSEED</span>
+    </footer></a>
+
+  </main>
+
+  <script>
+    const MY_LINKS = [
+      {
+        title: "YouTube Channel",
+        subtitle: "Gameplay, clips & highlights",
+        url: "https://www.youtube.com/@TheRealMayo_",
+        highlight: true
+      },
+      {
+        title: "EdgeBolt (Edgenuity Script)",
+        subtitle: "Edgenuity Script",
+        url: "https://edgebolt.vercel.app/",
+        highlight: true
+      },
+      {
+        title: "Official Website",
+        subtitle: "Visit my Website",
+        url: "https://yaktenz.github.io/mayonaise.gg",
+        highlight: false
+      },
+      {
+        title: "Discord Server",
+        subtitle: "Join the community",
+        url: "https://discord.gg/invite/a7eNTUaYPh",
+        highlight: false
+      },
+      {
+        title: "SoundCloud",
+        subtitle: "Listen to my music",
+        url: "https://soundcloud.com/youngdollazz1700",
+        highlight: false
+      },
+      {
+        title: "Music Website",
+        subtitle: "Listen to my music",
+        url: "https://yaktenz.github.io/youngdollazz/",
+        highlight: false
+      },
+      {
+        title: "TikTok",
+        subtitle: "Follow me on TikTok",
+        url: "https://www.tiktok.com/@glitchtheory_vision",
+        highlight: false
+      },
+      {
+        title: "Music Channel",
+        subtitle: "@youngdollazz1700",
+        url: "https://www.youtube.com/@YoungDollazz1700",
+        highlight: false
+      }
+    ];
+
+    const container = document.getElementById("links-container");
+
+    MY_LINKS.forEach(link => {
+      const a = document.createElement("a");
+      a.href = link.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.className = link.highlight ? "link-card featured" : "link-card";
+
+      a.innerHTML = `
+        <div class="link-text">
+          <span class="link-title">${link.title}</span>
+          ${link.subtitle ? `<span class="link-subtitle">${link.subtitle}</span>` : ""}
+        </div>
+        <span class="link-arrow">&#8599;</span>
+      `;
+
+      container.appendChild(a);
+    });
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let snowCanvas = null;
+    let snowFrame = null;
+    let snowflakes = [];
+
+    function resizeSnowfall() {
+      if (!snowCanvas) return;
+
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      snowCanvas.width = window.innerWidth * pixelRatio;
+      snowCanvas.height = window.innerHeight * pixelRatio;
+      snowCanvas.getContext("2d").setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      snowflakes = Array.from(
+        { length: Math.min(90, Math.max(35, Math.floor(window.innerWidth / 14))) },
+        () => ({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          radius: Math.random() * 2 + 1,
+          speed: Math.random() * 1.4 + 0.5,
+          drift: Math.random() * 0.8 + 0.2,
+          phase: Math.random() * Math.PI * 2
+        })
+      );
+    }
+
+    function animateSnowfall() {
+      if (!snowCanvas) return;
+
+      const context = snowCanvas.getContext("2d");
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      context.fillStyle = "rgba(255, 255, 255, 0.85)";
+
+      snowflakes.forEach(flake => {
+        flake.y += flake.speed;
+        flake.x += Math.sin(flake.y * 0.01 + flake.phase) * flake.drift;
+
+        if (flake.y > window.innerHeight + flake.radius) {
+          flake.y = -flake.radius;
+          flake.x = Math.random() * window.innerWidth;
+        }
+        if (flake.x < -flake.radius) flake.x = window.innerWidth + flake.radius;
+        if (flake.x > window.innerWidth + flake.radius) flake.x = -flake.radius;
+
+        context.beginPath();
+        context.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        context.fill();
+      });
+
+      snowFrame = window.requestAnimationFrame(animateSnowfall);
+    }
+
+    function updateSnowfall() {
+      const isDecember = new Date().getMonth() === 11;
+
+      if (!isDecember || reducedMotion.matches) {
+        if (snowFrame !== null) window.cancelAnimationFrame(snowFrame);
+        snowFrame = null;
+        if (snowCanvas) snowCanvas.remove();
+        snowCanvas = null;
+        snowflakes = [];
+        return;
+      }
+
+      if (snowCanvas) return;
+
+      snowCanvas = document.getElementById("snowfall") || document.createElement("canvas");
+      snowCanvas.id = "snowfall";
+      snowCanvas.setAttribute("aria-hidden", "true");
+      if (!snowCanvas.isConnected) document.body.appendChild(snowCanvas);
+      resizeSnowfall();
+      animateSnowfall();
+    }
+
+    function scheduleSeasonCheck() {
+      const now = new Date();
+      const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      window.setTimeout(() => {
+        updateSnowfall();
+        scheduleSeasonCheck();
+      }, Math.max(1000, nextMonth.getTime() - now.getTime() + 100));
+    }
+
+    window.addEventListener("resize", resizeSnowfall);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) updateSnowfall();
+    });
+    reducedMotion.addEventListener("change", updateSnowfall);
+
+    updateSnowfall();
+    scheduleSeasonCheck();
+  </script>
+
+</body>
+</html>
