@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>LinkSeed Mobile App Launcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkSeed Mayonaise</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <style>
     * {
       box-sizing: border-box;
@@ -150,11 +151,6 @@
       pointer-events: none;
     }
 
-    .app-icon-holder {
-      position: relative;
-      display: inline-block;
-    }
-
     .app-label {
       margin-top: 6px;
       font-size: 11.5px;
@@ -225,9 +221,9 @@
 
     @media (max-width: 768px) {
       .dock-container {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
         padding: 10px 14px 14px 14px;
       }
     }
@@ -264,12 +260,21 @@
   <script>
     const APPS_DATA = [
       {
+        id: "lifeinvader2",
+        name: "Life Invader",
+        newTab: false,
+        page: 1,
+        url: "social.html",
+        iconUrl: "assets/platform/life-invader.png",
+        colors: ["#e63946", "#8d0801"],
+      },
+      {
         id: "mayonaise",
         name: "Mayonaise",
         newTab: true,
         page: 1,
         url: "https://yaktenz.github.io/mayonaise.gg",
-        iconUrl: "assets/platform/placeholder.png",
+        iconUrl: "profiles/mayonaise/avatar.png",
         colors: ["#e63946", "#8d0801"],
       },
       {
@@ -278,7 +283,7 @@
         newTab: true,
         page: 1,
         url: "https://yaktenz.github.io/youngdollazz/",
-        iconUrl: "assets/platform/placeholder.png",
+        iconUrl: "https://yaktenz.github.io/youngdollazz/assets/favicon.png",
         colors: ["#f4a261", "#b55309"],
       },
       {
@@ -366,29 +371,29 @@
 
     const DOCK_APPS = [
       {
-        id: "social",
-        name: "Social",
-        newTab: true,
-        url: "social.html",
-        iconUrl: "assets/platform/placeholder.png",
-        colors: ["#55a630", "#132a13"],
-      },
-      {
-        id: "settings",
-        name: "Settings",
+        id: "lifeinvader1",
+        name: "Life Invader",
         newTab: false,
-        url: "settings.html",
-        iconUrl: "assets/platform/settings.jpg",
+        url: "social.html",
+        iconUrl: "assets/platform/life-invader.png",
         colors: ["#55a630", "#132a13"],
       },
       {
-        id: "edgenuity",
-        name: "Edgenuity",
+        id: "soundcloud2",
+        name: "SoundCloud",
         newTab: true,
-        url: "https://auth.edgenuity.com/login/",
-        iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDkynjlF_1u8lZGaHSlAbkEQjL--7JxCJkE8B07sw&usqp=CAE&s",
-        colors: ["#55a630", "#132a13"],
+        url: "https://soundcloud.com/youngdollazz1700",
+        iconUrl: "assets/platform/SoundCloud.png",
+        colors: ["#ff8800", "#c44d00"],
       },
+      {
+        id: "stadiatoolpanel",
+        name: "Stadia Tool Panel",
+        newTab: true,
+        url: "https://stadiabeta.github.io/tool-panel/",
+        iconUrl: "https://stadiastudios.github.io/stadia/store/assets/app/tool-panel.png",
+        colors: ["#8d99ae", "#2b2d42"],
+      }
     ];
 
     function generateAppIconPNG(app) {
@@ -441,32 +446,29 @@
         }
       });
 
-      const iconHolder = document.createElement("div");
-      iconHolder.className = "app-icon-holder";
-
       const iconWrap = document.createElement("div");
       iconWrap.className = "app-icon-wrap";
 
       const img = document.createElement("img");
       img.className = "app-icon-img";
       img.alt = app.name;
-      const generatedPng = generateAppIconPNG(app);
-      img.src = app.iconUrl ? app.iconUrl : generatedPng;
       if (app.iconUrl) {
+        img.src = app.iconUrl;
         img.onerror = () => {
           img.onerror = null;
-          img.src = generatedPng;
+          img.src = generateAppIconPNG(app);
         };
+      } else {
+        img.src = generateAppIconPNG(app);
       }
 
       iconWrap.appendChild(img);
-      iconHolder.appendChild(iconWrap);
 
       const label = document.createElement("span");
       label.className = "app-label";
       label.textContent = app.name;
 
-      link.appendChild(iconHolder);
+      link.appendChild(iconWrap);
       link.appendChild(label);
       return link;
     }
